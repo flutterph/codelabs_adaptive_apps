@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:adaptive_app/src/adaptive_playlists.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -18,17 +19,20 @@ final _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) {
-        return const Playlists();
+        return const AdaptivePlaylists();
       },
       routes: <RouteBase>[
         GoRoute(
           path: 'playlist/:id',
           builder: (context, state) {
-            final title = state.queryParams['title']!;
-            final id = state.params['id']!;
-            return PlaylistDetails(
-              playlistId: id,
-              playlistName: title,
+            final title = state.uri.queryParameters['title']!;
+            final id = state.pathParameters['id']!;
+            return Scaffold(
+              appBar: AppBar(title: Text(title)),
+              body: PlaylistDetails(
+                playlistId: id,
+                playlistName: title,
+              ),
             );
           },
         ),

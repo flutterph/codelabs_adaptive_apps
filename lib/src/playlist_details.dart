@@ -13,34 +13,50 @@ class PlaylistDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(playlistName),
-      ),
-      body: Consumer<FlutterDevPlaylists>(
-        builder: (context, playlists, _) {
-          final playlistItems = playlists.playlistItems(playlistId: playlistId);
-          if (playlistItems.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return Consumer<FlutterDevPlaylists>(
+      builder: (context, playlists, _) {
+        final playlistItems = playlists.playlistItems(playlistId: playlistId);
+        if (playlistItems.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-          return _PlaylistDetailsListView(playlistItems: playlistItems);
-        },
-      ),
+        return _PlaylistDetailsListView(playlistItems: playlistItems);
+      },
     );
   }
 }
 
-class _PlaylistDetailsListView extends StatelessWidget {
+class _PlaylistDetailsListView extends StatefulWidget {
   const _PlaylistDetailsListView({required this.playlistItems});
   final List<PlaylistItem> playlistItems;
 
   @override
+  State<_PlaylistDetailsListView> createState() =>
+      _PlaylistDetailsListViewState();
+}
+
+class _PlaylistDetailsListViewState extends State<_PlaylistDetailsListView> {
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: playlistItems.length,
+      controller: _scrollController,
+      itemCount: widget.playlistItems.length,
       itemBuilder: (context, index) {
-        final playlistItem = playlistItems[index];
+        final playlistItem = widget.playlistItems[index];
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: ClipRRect(
