@@ -44,3 +44,7 @@ Run app in all available devices:
 ```
 flutter run -d all
 ```
+
+### Contact
+
+If you think something is not working or can be improved, feel free to file an issue or reach out to us at [team@flutter.ph](mailto:team@flutter.ph).
